@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>자리 배치표</title>
+  <link rel="stylesheet" href="jari.css" />
+</head>
+<body>
+
+  <h1>자리 배치표 만들기</h1>
+  <p>인원 수와 한 줄에 앉을 사람 수를 입력하세요.</p>
+
+  <input type="number" id="total" placeholder="참석자 수" />
+  <input type="number" id="perRow" placeholder="한 줄에 앉을 사람 수" />
+  <br />
+  <button onclick="generateTable()">생성</button>
+
+  <hr />
+
+  <div id="tableContainer"></div>
+
+  <script>
+    function generateTable() {
+      const total = parseInt(document.getElementById("total").value);
+      const perRow = parseInt(document.getElementById("perRow").value);
+      const container = document.getElementById("tableContainer");
+      container.innerHTML = "";
+
+      if (isNaN(total) || isNaN(perRow) || total <= 0 || perRow <= 0) {
+        container.innerHTML = "<p>올바른 숫자를 입력하세요.</p>";
+        return;
+      }
+
+      const table = document.createElement("table");
+      let row;
+      let seatNumber = 1;
+      const numRows = Math.ceil(total / perRow);
+
+      for (let i = 0; i < numRows; i++) {
+        row = table.insertRow();
+        for (let j = 0; j < perRow; j++) {
+          if (seatNumber <= total) {
+            const cell = row.insertCell();
+            cell.textContent = `좌석 ${seatNumber}`;
+            seatNumber++;
+          } else {
+            const remaining = perRow - j;
+            const emptyCell = row.insertCell();
+            emptyCell.colSpan = remaining;
+            emptyCell.textContent = '';
+            break;
+          }
+        }
+      }
+
+      container.appendChild(table);
+    }
+  </script>
+
+</body>
+</html>
